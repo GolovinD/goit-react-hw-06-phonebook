@@ -1,39 +1,62 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+
+import { nanoid } from 'nanoid';
+import { useSelector } from 'react-redux';
+import { getContacts } from 'redux/selectors';
+import { useDispatch } from 'react-redux';
+import { addContact } from '../../redux/contactsSlice';
 
 import css from './ContactForm.module.css';
 
-const ContactForm = ({ onSubmit }) => {
-
+const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+
   const handleNameChange = event => {
     setName(event.target.value);
-  }
+  };
 
   const handleNumberChange = event => {
-  setNumber(event.target.value);
-  }
+    setNumber(event.target.value);
+  };
 
   const handleSubmit = event => {
     event.preventDefault();
-    console.log(name, number);
-    
+    addContacts(name, number);
+
     if (name === '' || number === '') {
-      return
+      return;
     }
 
-    onSubmit(name, number);
+    function addContacts(name, number) {
+      if (
+        contacts.find(
+          contact => contact.name.toLowerCase() === name.toLowerCase()
+        )
+      ) {
+        alert(`${name} is already in contacts.`);
+        return false;
+      }
+
+      const newContact = {
+        id: nanoid(),
+        name,
+        number,
+      };
+
+      dispatch(addContact(newContact));
+    }
+
     setName('');
     setNumber('');
-  }
+  };
 
   return (
     <div>
-      <form
-        className={css.form}
-        onSubmit={handleSubmit}>
+      <form className={css.form} onSubmit={handleSubmit}>
         <label>
           Name
           <input
@@ -58,18 +81,12 @@ const ContactForm = ({ onSubmit }) => {
             required
           />
         </label>
-        <button
-          className="btn"
-          type="submit"
-          >Add contact
+        <button className="btn" type="submit">
+          Add contact
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
 export default ContactForm;
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func,
-};
