@@ -8,7 +8,11 @@ import { getFilter } from 'redux/selectors';
 
 const ContactList = () => {
   const contacts = useSelector(getContacts);
+
   const filter = useSelector(getFilter);
+
+  console.log(filter);
+
   const filteredOutContacts = getContactsData();
 
   function getContactsData() {
