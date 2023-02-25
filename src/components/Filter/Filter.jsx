@@ -1,9 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { useDispatch } from 'react-redux';
 import { filterData } from '../../redux/filterSlice';
-
 import { useSelector } from 'react-redux';
 import { getFilter } from 'redux/selectors';
 
@@ -38,8 +36,3 @@ const Filter = () => {
 };
 
 export default Filter;
-
-Filter.protoTypes = {
-  filterData: PropTypes.string.isRequired,
-  onFilter: PropTypes.func.isRequired,
-};
